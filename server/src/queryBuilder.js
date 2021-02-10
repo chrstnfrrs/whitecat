@@ -1,7 +1,7 @@
 import knex from 'knex'
 
-import knexfile from '../knexfile.js'
+import knexfile from '../knexfile'
 
-const db = await knex(knexfile.development)
+const db = knex(knexfile.development)
 
 export default db
