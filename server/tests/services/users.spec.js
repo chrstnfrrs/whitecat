@@ -1,13 +1,10 @@
 import * as argon2 from 'argon2';
-import Chance from 'chance'
 
 import { createUser } from '../../src/services/users'
 import { selectUserByEmail, insertUser } from '../../src/repositories/users'
 
 jest.mock('argon2')
 jest.mock('../../src/repositories/users')
-
-const chance = new Chance()
 
 describe('users service', () => {
   describe('createUser', () => {

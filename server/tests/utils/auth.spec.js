@@ -1,11 +1,8 @@
 import jsonwebtoken from 'jsonwebtoken'
-import Chance from 'chance'
 
 import { createAccessToken } from '../../src/utils/auth'
 
 jest.mock('jsonwebtoken')
-
-const chance = new Chance()
 
 describe('auth utils', () => {
   describe('createAccessToken', () => {

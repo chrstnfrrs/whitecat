@@ -1,6 +1,4 @@
 import * as argon2 from 'argon2'
-import Chance from 'chance'
-
 import {
   userResolver,
   usersResolver,
@@ -23,8 +21,6 @@ jest.mock('argon2')
 jest.mock('../../src/repositories/users')
 jest.mock('../../src/services/users')
 jest.mock('../../src/utils/auth')
-
-const chance = new Chance()
 
 describe('users', () => {
   let _
