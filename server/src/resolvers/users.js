@@ -1,33 +1,18 @@
 import * as argon2 from 'argon2'
-import jsonwebtoken from 'jsonwebtoken'
+import { httpStatus } from '../constants/statusCodes'
 
 import {
   deleteUser,
-  insertUser,
   selectUserById,
   selectUsers,
   updateUser,
   selectUserByEmail,
-} from '../repositories/users.js'
-import { createAccessToken, sendRefreshToken } from '../utils/auth.js'
-
+} from '../repositories/users'
+import { createUser } from '../services/users'
+import { createAccessToken } from '../utils/auth'
 
 export const userResolver = async (root, args, context) => {
-  let uuid;
-  
-  const authorization = context.req.headers.authorization
-
-  console.log('invalid token')
-  if(!authorization) throw new Error('Not Authenticated')
-
-  try {
-    const authorizationToken = authorization.split(' ')[1]
-    const payload = jsonwebtoken.verify(authorizationToken, process.env.ACCESS_TOKEN_SECRET)
-    uuid = payload.uuid
-  } catch {
-    console.log('invalid token')
-    throw new Error('invalid token')
-  }
+  const {uuid} = args;
 
   const [user] = await selectUserById(uuid)
   
@@ -39,19 +24,9 @@ export const usersResolver = async () => await selectUsers() || null
 export const createUserResolver = async (root, args, context) => {
   const {input} = args
 
-  const hashedPassword = await argon2.hash(input.password)
+  const asdf = await createUser(input)
 
-  const userInput = {
-    ...input,
-    password: hashedPassword,
-    tokenVersion: 0,
-  }
-
-  const [user] = await insertUser(userInput)
-
-  if(!user) throw new Error('Failed to insert user')
-
-  return user
+  return asdf
 }
 
 export const updateUserResolver = async (root, args, context) => {
@@ -59,7 +34,7 @@ export const updateUserResolver = async (root, args, context) => {
 
   const [user] = await updateUser(uuid, input)
   
-  if (!user) throw new Error('Failed to update user')
+  if (!user) throw new Error(httpStatus[404])
   
   return user
 }
@@ -76,20 +51,20 @@ export const loginUserResolver = async (root, args, context) => {
   const { input: {email, password} } = args
 
   const [user] = await selectUserByEmail(email)
-  
-  if (!user) throw new Error('No user with login credentials found.')
+
+  if (!user) throw new Error(httpStatus[404])
 
   try {
-    console.log(await argon2.verify(user.password, password))
     if (await argon2.verify(user.password, password)) {
-      sendRefreshToken(context.res, user)
+
       return {
         accessToken: createAccessToken(user)
       }
     }
-  } catch (err) {
-    throw new Error(err)
+  } catch (error) {
+    console.log('loginUserResolver Error:', error)
+    throw new Error(httpStatus[404])
   }
 
-  throw new Error('No user with login credentials found.')
+  throw new Error(httpStatus[404])
 }
