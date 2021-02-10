@@ -1,4 +1,4 @@
-import db from '../queryBuilder.js'
+import db from '../queryBuilder'
 
 const createUsersTable = async () => db.schema.createTable('users', (table) => {
   table.uuid('uuid').defaultTo(db.raw('uuid_generate_v4()')).primary()

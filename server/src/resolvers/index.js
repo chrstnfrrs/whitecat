@@ -1,3 +1,4 @@
+import { helloResolver } from './hello'
 import {
   userResolver,
   usersResolver,
@@ -5,13 +6,13 @@ import {
   updateUserResolver,
   deleteUserResolver,
   loginUserResolver
-} from './users.js'
+} from './users'
 
 const resolvers = {
   Query: {
     user: userResolver,
     users: usersResolver,
-    hello: () => 'Hello World'
+    hello: helloResolver
   },
   Mutation: {
     createUser: createUserResolver,

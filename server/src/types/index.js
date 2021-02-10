@@ -1,7 +1,7 @@
 import {gql} from 'apollo-server'
 
-import Hello from './hello.js'
-import Users from './users.js'
+import Hello from './hello'
+import Users from './users'
 
 const Query = gql`
   type Query

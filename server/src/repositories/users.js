@@ -1,4 +1,4 @@
-import db from '../queryBuilder.js'
+import db from '../queryBuilder'
 
 const TABLE = 'users'
 const COLUMNS = ['uuid', 'id', 'email', 'password', 'tokenVersion']
