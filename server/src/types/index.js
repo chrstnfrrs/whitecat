@@ -2,6 +2,7 @@ import {gql} from 'apollo-server'
 
 import Hello from './hello'
 import Users from './users'
+import Days from './days'
 
 const Query = gql`
   type Query
@@ -14,5 +15,6 @@ export default [
   Query,
   Mutation,
   Hello,
-  Users
+  Users,
+  Days
 ]
