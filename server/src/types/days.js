@@ -1,4 +1,4 @@
-import {gql} from 'apollo-server'
+import { gql } from 'apollo-server';
 
 const dayTypes = gql`
   extend type Query {
@@ -14,6 +14,6 @@ const dayTypes = gql`
     userUuid: ID!
     date: String!
   }
-`
+`;
 
-export default dayTypes
+export default dayTypes;

@@ -1,17 +1,23 @@
-import db from '../queryBuilder'
+import db from '../queryBuilder';
 
-const createUsersTable = async () => db.schema.createTable('users', (table) => {
-  table.uuid('uuid').defaultTo(db.raw('uuid_generate_v4()')).primary().unique()
-  table.string('email')
-  table.string('password')
-  table.integer('tokenVersion')
-})
+const createUsersTable = () =>
+  db.schema.createTable('users', (table) => {
+    table
+      .uuid('uuid')
+      .defaultTo(db.raw('uuid_generate_v4()'))
+      .primary()
+      .unique();
+    table.string('email');
+    table.string('password');
+    table.integer('tokenVersion');
+  });
 
 const users = async () => {
-  const hasUsers = await db.schema.hasTable('users')
-  if (!hasUsers) {
-    await createUsersTable()
-  }
-}
+  const hasUsers = await db.schema.hasTable('users');
 
-export default users
+  if (!hasUsers) {
+    await createUsersTable();
+  }
+};
+
+export default users;

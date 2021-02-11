@@ -1,70 +1,71 @@
-import * as argon2 from 'argon2'
-import { httpStatus } from '../constants/statusCodes'
+import * as argon2 from 'argon2';
 
+import { httpStatus } from '../constants/statusCodes';
 import {
   deleteUser,
   selectUserById,
   selectUsers,
   updateUser,
   selectUserByEmail,
-} from '../repositories/users'
-import { createUser } from '../services/users'
-import { createAccessToken } from '../utils/auth'
+} from '../repositories/users';
+import { createUser } from '../services/users';
+import { createAccessToken } from '../utils/auth';
 
-export const userResolver = async (root, args, context) => {
-  const {uuid} = args;
+export const userResolver = async (root, args) => {
+  const { uuid } = args;
 
-  const [user] = await selectUserById(uuid)
-  
-  return user || null
-}
+  const [user] = await selectUserById(uuid);
 
-export const usersResolver = async () => await selectUsers() || null
+  return user || null;
+};
 
-export const createUserResolver = async (root, args, context) => {
-  const {input} = args
+export const usersResolver = async () => (await selectUsers()) || null;
 
-  const asdf = await createUser(input)
+export const createUserResolver = async (root, args) => {
+  const { input } = args;
 
-  return asdf
-}
+  const asdf = await createUser(input);
 
-export const updateUserResolver = async (root, args, context) => {
-  const {uuid, input} = args
+  return asdf;
+};
 
-  const [user] = await updateUser(uuid, input)
-  
-  if (!user) throw new Error(httpStatus[404])
-  
-  return user
-}
+export const updateUserResolver = async (root, args) => {
+  const { uuid, input } = args;
 
-export const deleteUserResolver = async (root, args, context) => {
-  const {uuid} = args
+  const [user] = await updateUser(uuid, input);
 
-  const status = await deleteUser(uuid)
+  if (!user) throw new Error(httpStatus[404]);
 
-  return Boolean(status)
-} 
+  return user;
+};
 
-export const loginUserResolver = async (root, args, context) => {
-  const { input: {email, password} } = args
+export const deleteUserResolver = async (root, args) => {
+  const { uuid } = args;
 
-  const [user] = await selectUserByEmail(email)
+  const status = await deleteUser(uuid);
 
-  if (!user) throw new Error(httpStatus[404])
+  return Boolean(status);
+};
+
+export const loginUserResolver = async (root, args) => {
+  const {
+    input: { email, password },
+  } = args;
+
+  const [user] = await selectUserByEmail(email);
+
+  if (!user) throw new Error(httpStatus[404]);
 
   try {
     if (await argon2.verify(user.password, password)) {
-
       return {
-        accessToken: createAccessToken(user)
-      }
+        accessToken: createAccessToken(user),
+      };
     }
   } catch (error) {
-    console.log('loginUserResolver Error:', error)
-    throw new Error(httpStatus[404])
+    console.log('loginUserResolver Error:', error);
+    throw new Error(httpStatus[404]);
   }
 
-  throw new Error(httpStatus[404])
-}
+  throw new Error(httpStatus[404]);
+};

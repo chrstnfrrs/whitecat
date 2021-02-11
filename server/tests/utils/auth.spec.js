@@ -8,18 +8,23 @@ describe('auth utils', () => {
   describe('createAccessToken', () => {
     test('should sign a jwt', () => {
       const user = {
-        uuid: chance.string(),
         email: chance.string(),
-        tokenVersion: chance.natural()
+        tokenVersion: chance.natural(),
+        uuid: chance.string(),
       }
 
       createAccessToken(user)
       
       expect(jsonwebtoken.sign).toHaveBeenCalledTimes(1)
-      expect(jsonwebtoken.sign).toHaveBeenCalledWith({uuid: user.uuid, email: user.email, tokenVersion: user.tokenVersion}, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' })
+      expect(jsonwebtoken.sign).toHaveBeenCalledWith({
+        email: user.email,
+        tokenVersion: user.tokenVersion,
+        uuid: user.uuid,
+      }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' })
     });
-    test('should sign a jwt', () => {
+    test('should return a jwt', () => {
       const accessToken = chance.string()
+
       jsonwebtoken.sign.mockReturnValue(accessToken)
 
       const result = createAccessToken(chance.string())

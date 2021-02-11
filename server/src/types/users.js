@@ -1,4 +1,4 @@
-import {gql} from 'apollo-server'
+import { gql } from 'apollo-server';
 
 const userTypes = gql`
   extend type Query {
@@ -33,6 +33,6 @@ const userTypes = gql`
     email: String
     password: String
   }
-`
+`;
 
-export default userTypes
+export default userTypes;
