@@ -1,0 +1,7 @@
+{
+  "extends": "get-off-my-lawn",
+  "rules": {
+    "no-console": "off",
+    "camelcase": "off"
+  }
+}
