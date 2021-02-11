@@ -19,7 +19,6 @@ const userTypes = gql`
 
   type User {
     uuid: ID!
-    id: ID!
     email: String!
     password: String!
     tokenVersion: Int!
