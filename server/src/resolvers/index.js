@@ -8,17 +8,26 @@ import {
   loginUserResolver
 } from './users'
 
+import {
+  daysResolver,
+  allDaysResolver,
+  createDayResolver
+} from './days'
+
 const resolvers = {
   Query: {
+    allDays: allDaysResolver,
+    days: daysResolver,
     user: userResolver,
     users: usersResolver,
-    hello: helloResolver
+    hello: helloResolver,
   },
   Mutation: {
+    createDay: createDayResolver,
     createUser: createUserResolver,
-    updateUser: updateUserResolver,
     deleteUser: deleteUserResolver,
     loginUser: loginUserResolver,
+    updateUser: updateUserResolver,
   }
 }
 
